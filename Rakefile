@@ -5,10 +5,10 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name        = "beanstalk-client"
-    gem.summary     = "Ruby client for beanstalkd"
-    gem.description = "Ruby client for beanstalkd"
+    gem.summary     = "Ruby client for beanstalkd, thread-safe."
+    gem.description = "Ruby client for beanstalkd, thread-safe."
     gem.email       = "kr@xph.us"
-    gem.homepage    = "http://github.com/kr/beanstalk-client-ruby"
+    gem.homepage    = "http://github.com/OvertimeMedia/beanstalk-client-ruby"
     gem.authors     = ["Keith Rarick"]
   end
   Jeweler::GemcutterTasks.new

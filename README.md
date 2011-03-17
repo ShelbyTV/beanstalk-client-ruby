@@ -12,12 +12,15 @@ For more information, see:
 
 ## Notes
 
-If you want to use this library from multiple concurrent threads, you should
-synchronize access to the connection. This library does no internal
-synchronization.
+This library has been synchronized internally to handle usage from multiple
+concurrent threads.
+
+*BUT* if you wish to use it in a concurrent environment you should see threaded_connection.
+The ThreadedPool handles pooling and reserving of connections so as to prevent dead lock conditions.
 
 ## Contributors
 
+ - Dan Spinosa
  - Isaac Feliu
  - Peter Kieltyka
  - Martyn Loughran
