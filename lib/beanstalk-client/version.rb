@@ -1,3 +1,3 @@
 module Beanstalk #:nodoc:
-  VERSION = '1.0.33'
+  VERSION = '1.1.33'
 end
