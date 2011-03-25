@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{beanstalk-client}
-  s.version = "1.1.33"
+  s.version = "1.2.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Keith Rarick"]
-  s.date = %q{2011-03-16}
+  s.date = %q{2011-03-25}
   s.description = %q{Ruby client for beanstalkd, thread-safe.}
   s.email = %q{kr@xph.us}
   s.extra_rdoc_files = [
@@ -29,6 +29,8 @@ Gem::Specification.new do |s|
     "lib/beanstalk-client/threaded_connection.rb",
     "lib/beanstalk-client/version.rb",
     "test/helper.rb",
+    "test/multithread_bad.rb",
+    "test/multithread_safe.rb",
     "test/test_beanstalk-client.rb",
     "website/index.txt",
     "website/javascripts/rounded_corners_lite.inc.js",
@@ -43,7 +45,8 @@ Gem::Specification.new do |s|
     "test/helper.rb",
     "test/multithread_bad.rb",
     "test/multithread_safe.rb",
-    "test/test_beanstalk-client.rb"
+    "test/test_beanstalk-client.rb",
+    "test/thread_queue.rb"
   ]
 
   if s.respond_to? :specification_version then
