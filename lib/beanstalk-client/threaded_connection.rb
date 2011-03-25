@@ -12,10 +12,9 @@
 # connections - those with outstanding jobs - and does not make them available for use.
 #
 # A call to .reserve_connection will return a free connection, waiting for one to become available if necessary.
-# A call to .try_reserve_connection will return a free connection or nil if there are no free ones.
 #
-# If you have 1 main loop calling reserve and N job-processing threads, you should create a ThreadedPool with a 
-# size of N+1.
+# If you have 1 main loop calling reserve and N job-processing threads, you should create a 
+# Beanstalk::ThreadedPool with a size of N.
 #
 # *****************************
 # CAVEAT: If you are using a connection c from the ThreadedPool to do anything other than .reserve and then work on a job,
@@ -82,18 +81,17 @@ module Beanstalk
     def connect()
       @pool_mutex.lock
       
-      @connections ||= []
-      @unavailable_connections ||= []
-      @available_connections ||= []
+      @all_connections ||= []
+      @available_connections ||= SizedQueue.new(@pool_size)
     
-      (@pool_size - @connections.size).times do
+      (@pool_size - @all_connections.size).times do
         begin
           conn = ThreadedConnection.new(@addr, self, @default_tube)
           prev_watched = conn.list_tubes_watched()
           to_ignore = prev_watched - @watch_list
           @watch_list.each{|tube| conn.watch(tube)}
           to_ignore.each{|tube| conn.ignore(tube)}
-          @connections << conn
+          @all_connections << conn
           @available_connections << conn
         rescue Errno::ECONNREFUSED
           raise NotConnected
@@ -104,43 +102,16 @@ module Beanstalk
     
     ensure
       @pool_mutex.unlock
-      @connections.size
+      @all_connections.size
     end
     
     def make_connection_available(conn)
-      @pool_mutex.lock
-      @unavailable_connections.delete(conn)
       @available_connections << conn
-    ensure
-      @pool_mutex.unlock
-    end
-    
-    # Returns the first available connection, if there is one
-    # If there are none available, returns nil.
-    def try_reserve_connection
-      connect()
-      @pool_mutex.lock
-      conn = @available_connections.first
-      if conn
-        @available_connections.delete(conn)
-        @unavailable_connections << conn
-      end
-    ensure
-      @pool_mutex.unlock
-      return conn
     end
     
     # Returns an available connection, yielding control and spinning until one can be had
     def reserve_connection
-      conn = try_reserve_connection
-      if conn
-        return conn
-      else
-        #Are there no full semaphores?  Just these binary ones (aka mutexes)?
-        Thread.pass
-        sleep(0.5)
-        return reserve_connection
-      end
+      return @available_connections.pop
     end
   
   end
