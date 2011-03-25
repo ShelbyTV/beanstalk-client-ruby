@@ -45,8 +45,7 @@ Gem::Specification.new do |s|
     "test/helper.rb",
     "test/multithread_bad.rb",
     "test/multithread_safe.rb",
-    "test/test_beanstalk-client.rb",
-    "test/thread_queue.rb"
+    "test/test_beanstalk-client.rb"
   ]
 
   if s.respond_to? :specification_version then
