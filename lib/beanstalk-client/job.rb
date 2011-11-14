@@ -99,6 +99,8 @@ class Beanstalk::Job
     return bury() if delay >= DELAY_MAX
     release(pri, d)
   end
+  
+  def jobid() id; end
 
   def to_s
     "(job #{body.inspect})"
